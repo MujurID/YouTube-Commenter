@@ -9,6 +9,8 @@ import re
 import time
 import random
 
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
 def add_comment(client, video_id, cmnt):
     resource = {'snippet': {
                     'channelId': 'UCBR8-60-B28hp2BmDPdntcQ', # Fill in with any random channel id
@@ -53,7 +55,6 @@ def get_data(file):
     return data
 
 def authenticate():
-    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
     flow = InstalledAppFlow.from_client_secrets_file('client_secret.json', ['https://www.googleapis.com/auth/youtube.force-ssl'])
     credentials = flow.run_console()
     return build('youtube', 'v3', credentials=credentials)
@@ -77,7 +78,7 @@ def main():
 
             for video_id in video_ids:
                 for cmnt in cmnts:
-                    new_cmnt = f'{random.choice(prefixes)}\n\n\n{cmnt}'
+                    new_cmnt = f'{random.choice(prefixes)}\n\n{cmnt}'
                     add_comment(client, video_id, new_cmnt)
                     time.sleep(delay)
     except Exception as e:
